@@ -137,12 +137,7 @@ document.querySelectorAll('section').forEach(section => {
   observer.observe(section);
 });
 
-if ($('.toggle').length > 0) {
-  $('.toggle').click(function () {
-    $('.text-1').not($(this).next()).slideUp(500);
-    $(this).next().slideToggle(500);
-  });
-}
+
 
 //  Appointment
 const Fname = document.getElementById('Fname');

@@ -1,3 +1,9 @@
+if ($('.toggle').length > 0) {
+  $('.toggle').click(function () {
+    $('.text-1').not($(this).next()).slideUp(500);
+    $(this).next().slideToggle(500);
+  });
+}
 // ناخد بيانات الفورم المخزنة
 const formData = JSON.parse(localStorage.getItem('formData'));
 
