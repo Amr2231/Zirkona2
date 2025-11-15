@@ -1,28 +1,33 @@
 import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+
   const { name, email, product } = req.body;
 
-  // إنشاء transporter باستخدام متغيرات البيئة
+  console.log('Request body:', req.body);
+
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.EMAIL_USER,  // من Environment Variable
-      pass: process.env.EMAIL_PASS,  // من Environment Variable
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // الإيميل اللي هيوصل عليه الطلب
+      to: process.env.EMAIL_USER, // الإيميل اللي هيستلم الطلبات
       subject: `New Order: ${product}`,
       text: `Name: ${name}\nEmail: ${email}\nProduct: ${product}`,
     });
 
     res.status(200).json({ message: "Email sent!" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to send email." });
+    console.error('Email sending error:', error);
+    res.status(500).json({ message: "Failed to send email.", error: error.toString() });
   }
 }
